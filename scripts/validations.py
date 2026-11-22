@@ -17,6 +17,14 @@ k8s_RELEASE_URL = "https://api.github.com/repos/kubernetes/kubernetes/releases"
 def ignore_file(file_name: str):
     return file_name.startswith('__')
 
+# validate if each framework has scanning scope and allowed one
+def validate_framework_scanning_scope(framework, framework_file):
+    allowed_scopes = [["cluster", "file"], ["cluster"], ["cloud"], ["GKE"], ["EKS"], ["AKS"]]
+    assert "scanningScope" in framework and framework["scanningScope"] is not None, f"framework {framework_file} has no [\"scanningScope\"] field"
+    scanning_scopes = framework["scanningScope"]
+    assert "matches" in scanning_scopes and scanning_scopes["matches"] is not None, f"framework {framework_file} has no [\"scanningScope\"][\"matches\"] fields"
+    assert scanning_scopes["matches"] in allowed_scopes, f"framework {framework_file} has no allowed scope: {scanning_scopes['matches']}"
+
 # Test that each control ID in a framework file has a corresponding control file in the "controls" directory
 def validate_controls_in_framework():
     framework_files = os.listdir(FRAMEWORK_DIR)
@@ -25,6 +33,8 @@ def validate_controls_in_framework():
             continue
         with open(os.path.join(FRAMEWORK_DIR, framework_file), "r") as f:
             framework = json.load(f)
+
+            validate_framework_scanning_scope(framework, framework_file)
 
             for control in framework["activeControls"]:
                 control_id = control["controlID"]

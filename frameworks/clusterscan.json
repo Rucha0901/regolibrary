@@ -4,6 +4,11 @@
     "attributes": {
         "builtin": true
     },
+    "scanningScope": {
+        "matches": [
+            "cluster"
+        ]
+    },
     "typeTags": [
         "security"
     ],
