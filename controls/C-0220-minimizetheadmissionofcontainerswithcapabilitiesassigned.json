@@ -9,14 +9,16 @@
         "https://kubernetes.io/docs/concepts/policy/pod-security-policy/#enabling-pod-security-policies",
         "https://www.nccgroup.com/research/abusing-privileged-and-unprivileged-linux-containers/"
     ],
-    "attributes": {
-    },
+    "attributes": {},
     "rulesNames": [
         "psp-required-drop-capabilities"
     ],
     "baseScore": 5.0,
     "impact_statement": "Pods with containers require capabilities to operate will not be permitted.",
     "default_value": "By default, PodSecurityPolicies are not defined.",
+    "category": {
+        "name": "Workload"
+    },
     "scanningScope": {
         "matches": [
             "cluster",
